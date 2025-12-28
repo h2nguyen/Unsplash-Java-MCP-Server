@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: Unsplash Java MCP Server
+  main:
+    web-application-type: servlet
+  ai:
+    mcp:
+      server:
+        enabled: true
+        name: unsplash-java-mcp-server
+        version: 1.0.0
+        annotation-scanner:
+          enabled: true
+        protocol: sse
+        sse-endpoint: /sse
+        sse-message-endpoint: /mcp/message
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+unsplash:
+  access-key: ${UNSPLASH_ACCESS_KEY:your_access_key_here}
+  cors:
+    allowed-origins: "*"
+    allowed-methods: "*"
+    allowed-headers: "*"
+    mapping: "/**"

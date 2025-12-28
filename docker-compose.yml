@@ -1,0 +1,39 @@
+services:
+  mcp-server:
+    build: .
+    image: unsplash-java-mcp-server
+    container_name: mcp-server
+    env_file:
+      - .env
+    ports:
+      - "3001:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - unsplash-mcp-network
+
+  # MCP Inspector is a great tool to test MCP servers
+  mcp-inspector:
+    image: node:22-slim
+    container_name: mcp-inspector
+    ports:
+      - "6274:6274"
+    working_dir: /app
+    environment:
+      - DANGEROUSLY_OMIT_AUTH=true
+      - HOST=0.0.0.0
+    command: >
+      sh -c "npm install -g @modelcontextprotocol/inspector && npx @modelcontextprotocol/inspector http://mcp-server:8080/sse"
+    depends_on:
+      mcp-server:
+        condition: service_healthy
+    networks:
+      - unsplash-mcp-network
+
+networks:
+  unsplash-mcp-network:
+    driver: bridge

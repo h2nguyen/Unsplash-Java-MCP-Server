@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "unsplash": {
+      "type": "sse",
+      "url": "http://localhost:3001/sse",
+      "note": "This MCP server integrates with the Unsplash API. To use it with SSE transport, add this URL directly to the client configuration."
+    }
+  }
+}
